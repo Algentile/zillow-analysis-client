@@ -1,6 +1,6 @@
 import requests
 from sys import argv
-from urllib.parse import urlencode
+from urllib.parse import quote_plus
 
 class RestClient(object):
 
@@ -39,17 +39,18 @@ class RestClient(object):
 		data = requests.get(request_url, params=parameters).json()
 		return data
 
-	def generate_city_state_zip(city, state, zip_code):
+	def generate_city_state_zip(self, city, state, zip_code):
 		if(city != None and state != None and zip_code != None):
-			encoded_string = urlencode(','.join([city, '+'+state, '+'zip_code]))
+			encoded_string = quote_plus(",".join([city, state, zip_code]))
 		elif(city != None and state != None and zip_code == None):
-			encoded_string = urlencode(','.join([city, '+'+state]))
+			encoded_string = quote_plus(",".join([city, state]))
 		elif(city != None and state == None and zip_code != None):
-			encoded_string = urlencode(','.join([city, '+'zip_code]))
+			encoded_string = quote_plus(",".join([city, zip_code]))
 		else:
-			raise TypeError('None of the fields were entered. Need to enter valid fields.')
+			raise TypeError("None of the fields were entered. Need to enter valid fields.")
 		return encoded_string
 
 if __name__ == '__main__':
 	#testing string generation
-	print(generate_city_state_zip('lawrence', 'MA', '01841'))
+	client = RestClient("X1-ZWz1gaiw11wnpn_7c2wf")
+	print(client.generate_city_state_zip("lawrence", "MA", "01841"))
